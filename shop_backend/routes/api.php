@@ -32,7 +32,7 @@ Route::put('/submit', [CartController::class, 'submit']);
 
 Route::prefix('user')->group(function () {
     Route::post('/register', [RegisterController::class, 'store']);
-    Route::get('/', [IndexController::class, 'show']);
+    Route::get('/', [IndexController::class, 'show'])->middleware('check.admin');
 });
 
 Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
@@ -63,5 +63,7 @@ Route::get('/available-slots/{id}', [CarWashScheduleController::class, 'availabl
 Route::post('/book-slot', [CarWashScheduleController::class, 'bookSlot'])->middleware('jwt.auth');
 
 
-
+Route::prefix('admin')->group(function () {
+    Route::get('/', [IndexController::class, 'show'])->middleware('check.admin');
+});
 

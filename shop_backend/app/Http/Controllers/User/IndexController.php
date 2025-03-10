@@ -21,7 +21,13 @@ class IndexController extends Controller
 
     public function show(Request $request) {
         $id = $request->input('user_id');
-        $bookings = CarWashSchedule::where('user_id', $id)->get();
-        return $bookings;
+
+        $bookings = CarWashSchedule::select('car_wash_schedules.*', 'car_washes.category')
+            ->join('car_washes', 'car_wash_schedules.car_wash_id', '=', 'car_washes.id') // Соединение с таблицей car_washes
+            ->where('car_wash_schedules.user_id', $id)
+            ->get();
+
+        return response()->json($bookings);
     }
+
 }
