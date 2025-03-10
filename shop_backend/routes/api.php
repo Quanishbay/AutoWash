@@ -60,6 +60,8 @@ Route::post('/create-order', [OrderController::class, 'createOrder']);
 
 Route::get('/car-washes/schedule', [CarWashScheduleController::class, 'scheduleById']);
 Route::get('/available-slots/{id}', [CarWashScheduleController::class, 'availableSlots']);
+Route::post('/book-slot', [CarWashScheduleController::class, 'bookSlot'])->middleware('jwt.auth');
+
 
 
 

@@ -41,13 +41,6 @@ class User extends Authenticatable implements JWTSubject
      *
      * @return array<string, string>
      */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
 
     public function getJWTIdentifier()
     {
@@ -59,16 +52,4 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function isAdmin()
-    {
-        return $this->role === 'admin';
-    }
-
-    public function items(){
-        return $this->hasMany(Item::class);
-    }
-
-    public function bookings(){
-        return $this->hasMany(Booking::class);
-    }
 }

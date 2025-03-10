@@ -54,4 +54,37 @@ class CarWashScheduleController extends Controller
         }
         return response()->json($availableSlots);
     }
+
+    public function bookSlot(Request $request)
+    {
+        $request -> validate([
+            'car_wash_id' => 'required|integer',
+            'date' => 'required|date',
+            'time' => 'required|date_format:H:i',
+        ]);
+
+        $carWashId = $request->car_wash_id;
+        $date = $request->date;
+        $time = $request->time;
+
+        $userId = auth()->id();
+
+        $isBooked = CarWashSchedule::where('car_wash_id', $carWashId)
+            ->where('date', $date)
+            ->where('time', $time)
+            ->exists();
+
+        if ($isBooked) {
+            return response()->json(['message' => 'Это время уже забронировано'], 400);
+        }
+
+        CarWashSchedule::create([
+            'car_wash_id' => $carWashId,
+            'date' => $date,
+            'time' => $time,
+            'user_id' => $userId,
+        ]);
+
+        return response()->json(['message' => 'Запись успешно создана']);
+    }
 }
