@@ -8,25 +8,52 @@ use Illuminate\Http\Request;
 
 class CarWashScheduleController extends Controller
 {
+
     public function scheduleById(Request $request)
     {
-
         $washId = $request->input('id');
-        if ($washId) {
-            $schedule = CarWashSchedule::where('car_wash_id', $washId)
-                ->where('date', '>=', now()->toDateString())
-                ->orderBy('date')
-                ->get();
 
-            if ($schedule->isEmpty()) {
-                return response()->json(['message' => 'Нет доступных записей']);
-            }
-            return response()->json($schedule);
-        } else {
-            return CarWashSchedule::all();
+        if (!$washId) {
+            return response()->json(['message' => 'ID автомойки не указан'], 400);
         }
 
+        // Получаем все уже забронированные слоты
+        $bookedSlots = CarWashSchedule::where('car_wash_id', $washId)
+            ->where('date', '>=', now()->toDateString())
+            ->orderBy('date')
+            ->pluck('time', 'date'); // Достаем дату и время
+
+        // Генерируем список всех возможных слотов (с 10:00 до 22:00, шаг 30 минут)
+        $startTime = Carbon::createFromTime(10, 0);
+        $endTime = Carbon::createFromTime(22, 0);
+
+        $availableSlots = [];
+
+        for ($date = now(); $date <= now()->addDays(7); $date->addDay()) { // На 7 дней вперед
+            $day = $date->toDateString();
+            $slots = [];
+
+            for ($time = clone $startTime; $time < $endTime; $time->addMinutes(30)) {
+                $timeSlot = $time->format('H:i');
+
+                // Проверяем, занят ли слот
+                if (!isset($bookedSlots[$day]) || $bookedSlots[$day] !== $timeSlot) {
+                    $slots[] = $timeSlot;
+                }
+            }
+
+            if (!empty($slots)) {
+                $availableSlots[$day] = $slots;
+            }
+        }
+
+        if (empty($availableSlots)) {
+            return response()->json(['message' => 'Нет свободных слотов']);
+        }
+
+        return response()->json($availableSlots);
     }
+
 
     public function availableSlots(Request $request, $id)
     {

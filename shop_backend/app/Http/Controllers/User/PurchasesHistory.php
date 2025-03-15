@@ -9,9 +9,11 @@ use Illuminate\Http\Request;
 
 class PurchasesHistory extends Controller
 {
-    public function index(User $user){
+    public function index(){
 
-        $result = Cart::where('user_id', $user->id)
+        $userId = input('user_id');
+
+        $result = Cart::where('user_id', $userId)
             ->with('service')
             ->get();
 

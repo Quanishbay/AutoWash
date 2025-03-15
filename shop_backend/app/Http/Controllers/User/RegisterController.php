@@ -27,4 +27,18 @@ class RegisterController extends Controller
 
 
     }
+
+    public function editUser(Request $request, User $user) {
+
+        $validatedData = $request -> validate([
+            'name' => 'string',
+            'email' => 'email',
+        ]);
+
+        $user = auth()->user();
+
+        $user->update($validatedData);
+
+        return "success";
+    }
 }
