@@ -26,7 +26,9 @@ class BookingController extends Controller
         $validated = $request->validate([
             'car_wash_id' => 'required|exists:car_washes,id',
             'appointment_time' => 'required|date|after:now',
+            'service_id' => 'required|exists:services,id',
         ]);
+
         $user_id = auth()->user();
 
         Booking::create([
@@ -34,6 +36,7 @@ class BookingController extends Controller
             'car_wash_id' => $validated['car_wash_id'],
             'appointment_time' => $validated['appointment_time'],
             'status' => 'pending',
+            'service_id' => $validated['service_id'],
         ]);
 
         return response()->json("New booking has been added");

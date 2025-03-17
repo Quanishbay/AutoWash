@@ -3,18 +3,19 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
-use App\Models\Cart;
-use App\Models\User;
-use Illuminate\Http\Request;
+use App\Models\CarWashSchedule;
 
 class PurchasesHistory extends Controller
 {
-    public function index(){
+    public function index()
+    {
 
-        $userId = input('user_id');
+        $userId = auth()->user();
 
-        $result = Cart::where('user_id', $userId)
-            ->with('service')
+        $result = CarWashSchedule::select('users.name as user_name', 'date', 'time', 'car_washes.name as car_wash_name')
+            ->where('user_id', $userId['id'])
+            ->leftJoin('users', 'users.id', '=', 'car_wash_schedules.user_id')
+            ->leftJoin('car_washes', 'car_washes.id', '=', 'car_wash_schedules.car_wash_id')
             ->get();
 
         return response()->json($result);

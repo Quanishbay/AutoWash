@@ -34,10 +34,14 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
     Route::post('me', [AuthController::class, 'me']);
 });
 
-Route::get('/history/{user}', [PurchasesHistory::class, 'index'])->middleware('jwt.auth');
+Route::get('/history/', [PurchasesHistory::class, 'index'])->middleware('jwt.auth');
 Route::get('/filter-with-name', [FilterServices::class, 'filterServices']);
 
-Route::get('/car-washes', [CarWashController::class, 'index']);
+Route::group(['prefix' => 'car-washes'], function () {
+    Route::get('/', [CarWashController::class, 'index']);
+    Route::get('/services-by-id', [CarWashController::class, 'index']);
+});
+
 Route::get('/get-by-category', [CarWashController::class, 'getByCategory']);
 
 Route::group(['prefix' => 'booking'], function ($router) {

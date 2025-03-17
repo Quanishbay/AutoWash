@@ -28,23 +28,15 @@ class CarWashController extends Controller
             }
             return response()->json($carWashNames, 200);
         }
-
-        return response()->json(CarWash::paginate(10), 200);
     }
 
 
     public function getByCategory(Request $request)
     {
-        $categories = explode(',', $request->query('category_id', ''));
+        $category = $request->input('category_id');
 
-        if (empty($categories) || $categories[0] === '') {
-            return CarWash::all();
-        }
-
-        return CategoryCarWash::leftJoin('car_washes', 'car_washes.id', '=', 'category_car_washes.car_wash_id')
-            ->whereIn('category_car_washes.category_id', $categories)
-            ->get();
+        return CategoryCarWash::where('category_id', $category)->get();
     }
-    }
+}
 
 
