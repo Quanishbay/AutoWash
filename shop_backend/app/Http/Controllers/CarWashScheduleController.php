@@ -55,8 +55,10 @@ class CarWashScheduleController extends Controller
     }
 
 
-    public function availableSlots(Request $request, $id)
+    public function availableSlots(Request $request)
     {
+
+        $user = auth()->user()['id'];
 
         $startTime = Carbon::createFromTime(8, 0);
         $endTime = Carbon::createFromTime(20, 0);
@@ -64,7 +66,7 @@ class CarWashScheduleController extends Controller
 
         $date = Carbon::now()->toDateString();
 
-        $bookedTimes = CarWashSchedule::where('car_wash_id', $id)
+        $bookedTimes = CarWashSchedule::where('car_wash_id', $user)
             ->where('date', $date)
             ->pluck('time')
             ->toArray();

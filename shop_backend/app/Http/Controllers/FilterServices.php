@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Service;
 use Illuminate\Http\Request;
 
 class FilterServices extends Controller
 {
     public function filterServices(Request $request){
 
-        $names = $request->query('name');
+        $name = $request->query('name');
 
-        dd($names);
+        return Service::where('name', 'like', '%'.$name.'%')->get();
+
     }
 }

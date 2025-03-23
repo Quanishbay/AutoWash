@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Hash;
 
 class IndexController extends Controller
 {
-    public function index() {
+    public function getWashes() {
 
         $users = User::all();
         return response()->json($users);
@@ -22,7 +22,7 @@ class IndexController extends Controller
     public function show(Request $request) {
         $id = $request->input('user_id');
 
-        $bookings = CarWashSchedule::select('car_wash_schedules.*', 'car_washes.category')
+        $bookings = CarWashSchedule::select('car_wash_schedules.*', 'car_washes.category_id')
             ->join('car_washes', 'car_wash_schedules.car_wash_id', '=', 'car_washes.id') // Соединение с таблицей car_washes
             ->where('car_wash_schedules.user_id', $id)
             ->get();
