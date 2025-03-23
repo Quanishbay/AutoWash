@@ -10,7 +10,6 @@ class OrderController extends Controller
 {
     public function createOrder(Request $request)
     {
-        // Валидация данных
         $request->validate([
             'customer_name' => 'required|string',
             'customer_email' => 'required|email',

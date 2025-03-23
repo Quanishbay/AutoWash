@@ -10,7 +10,9 @@
         "laravel/framework": "^11.31",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
+        "maatwebsite/excel": "^1.1",
         "mpdf/mpdf": "^8.2",
+        "phpoffice/phpspreadsheet": "^4.1",
         "twilio/sdk": "^8.4",
         "tymon/jwt-auth": "^2.1"
     },

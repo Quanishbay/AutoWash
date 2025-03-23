@@ -15,34 +15,28 @@ class AdminController extends Controller
         $last = $request->input('last');
         $popular = $request->input('popular');
 
-        $washId = auth()->user()['car_wash_id'];
 
-        // Базовый запрос с фильтром car_wash_id
-        $result = DB::table('car_wash_schedules')
-            ->join('services', 'services.id', '=', 'car_wash_schedules.service_id')
-            ->where('car_wash_schedules.car_wash_id', $washId);
-
-        // Если передан фильтр "user", группируем по user_id и возвращаем последний визит каждого пользователя
         if ($user) {
-            $result->select('car_wash_schedules.user_id', DB::raw('MAX(car_wash_schedules.created_at) as last_wash'))
-                ->groupBy('car_wash_schedules.user_id');
+            return CarWashSchedule::select('user_id')
+                ->distinct()
+                ->get();
         }
 
-        // Если передан фильтр "last", выводим последние 5 записей
-        elseif ($last) { // используем elseif, чтобы избежать пересечения фильтров с user
-            $result->select('car_wash_schedules.*', 'services.price')
-                ->orderBy('car_wash_schedules.created_at', 'desc')
-                ->take(5);
+        if ($last) {
+            return CarWashSchedule::orderBy('created_at')
+                ->limit(5)
+                ->get();
         }
 
-        // Если передан фильтр "popular", выводим популярные сервисы по количеству записей
-        elseif ($popular) {
-            $result->select('car_wash_schedules.service_id', DB::raw('COUNT(car_wash_schedules.id) as total_count'))
-                ->groupBy('car_wash_schedules.service_id')
-                ->orderBy('total_count', 'desc');
+        if ($popular) {
+            return DB::table('car_wash_schedules')
+                ->join('services', 'services.id', '=', 'car_wash_schedules.service_id') // join таблиц
+                ->select('services.name', DB::raw('COUNT(car_wash_schedules.service_id) as service_count')) // выбор полей и COUNT
+                ->groupBy('car_wash_schedules.service_id', 'services.name')
+                ->orderBy('service_count', 'desc')
+                ->limit(5)
+                ->get();
         }
-
-        return $result->get(); // Получение результата
     }
 
 
