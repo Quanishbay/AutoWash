@@ -5,7 +5,9 @@ export default {
   data() {
     return {
       userData: '',
-      historyData: ''
+      historyData: '',
+      selectedFile: null, // Для загрузки фото
+      userPhotoUrl: '',    // Для отображения фото
     }
   },
   methods: {
@@ -15,13 +17,13 @@ export default {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       })
-          .then((response => {
-                this.userData = response.data
-              })
-          )
+          .then(response => {
+            this.userData = response.data;
+            this.userPhotoUrl = response.data.photo_url;
+          })
           .catch(error => {
             console.log(error);
-          })
+          });
     },
     history(id) {
       axios.get(`http://localhost:8000/api/history/${id}`, {
@@ -29,13 +31,41 @@ export default {
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         }
       })
-          .then(response =>{
-            this.historyData = response.data
+          .then(response => {
+            this.historyData = response.data;
           })
+    },
+    handleFileChange(event) {
+      this.selectedFile = event.target.files[0]; // Сохраняем выбранный файл
+    },
+    uploadPhoto() {
+      if (!this.selectedFile) {
+        alert("Please select a photo to upload!");
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append("photo", this.selectedFile); // Добавляем фото в FormData
+
+      axios.post('http://localhost:8000/api/user/upload-photo', formData, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`,
+          'Content-Type': 'multipart/form-data',
+        }
+      })
+          .then(response => {
+            console.log('Access token in localStorage:', localStorage.getItem('access_token'));
+
+            alert("Photo uploaded successfully!");
+            this.userPhotoUrl = `http://localhost/storage/${response.data.photo}`; // Обновляем URL после загрузки
+          })
+          .catch(error => {
+            console.log("Failed to upload photo:", error);
+          });
     }
   },
   mounted() {
-    this.getInfo()
+    this.getInfo();
   }
 }
 </script>
@@ -45,6 +75,17 @@ export default {
     <h3>Name: {{ userData.name }}</h3>
     <h3>Email: {{ userData.email }}</h3>
     <h3>Role: {{ userData.role }}</h3>
+  </div>
+
+  <div v-if="userPhotoUrl" class="photo-section">
+    <h3>User Photo:</h3>
+    <img :src="userPhotoUrl" alt="User Photo" class="user-photo" />
+  </div>
+
+  <div class="upload-section">
+    <h3>Upload New Photo:</h3>
+    <input type="file" @change="handleFileChange" />
+    <button @click="uploadPhoto" class="upload-button">Upload Photo</button>
   </div>
 
   <button @click="history(userData.id)" class="history-button">Purchases History</button>
@@ -88,6 +129,37 @@ export default {
   font-size: 18px;
   color: #333;
   margin: 5px 0;
+}
+
+.photo-section {
+  margin-bottom: 20px;
+}
+
+.user-photo {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin: 10px 0;
+}
+
+.upload-section {
+  margin-bottom: 20px;
+}
+
+.upload-button {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+.upload-button:hover {
+  background-color: #0056b3;
 }
 
 .history-button {

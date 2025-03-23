@@ -4,7 +4,6 @@
     <router-link v-if="!isAuthenticated" to="/register" class="nav-link">Register</router-link>
     <router-link v-if="isAuthenticated" to="/cart" class="nav-link">Cart</router-link>
     <router-link v-if="isAdmin" to="/edit/categories" class="nav-link">Edit Categories</router-link>
-    <router-link v-if="isAuthenticated" to="/categories" class="nav-link">Categories</router-link>
     <button v-if="isAuthenticated" @click="logout" class="nav-link">Logout</button>
     <button v-if="userData" @click="profilePage(userData.id)" class="nav-link">
       {{ userData.name }}

@@ -5,7 +5,7 @@ import ServicesPage from "@/components/Client/Services/ServicesPage.vue";
 import AboutUs from "@/components/Navigation/AboutUs.vue";
 import ContactsPage from "@/components/Navigation/ContactsPage.vue";
 import CartServices from "@/components/Client/Cart/CartServices.vue";
-import CategoryIndex from "@/components/Client/Category/CategoryIndex.vue";
+// import CategoryIndex from "@/components/Client/Category/CategoryIndex.vue";
 import editCategories from "@/components/Admin/EditCategories.vue";
 import ShowService from "@/components/Admin/ShowService.vue";
 import CategoryShow from "@/components/Client/Category/CategoryShow.vue";
@@ -20,7 +20,7 @@ const routes = [
     {path: '/register', component: RegisterPage},
     {path: '/service/:id', component: ShowService, props: true},
     {path: '/cart', component: CartServices},
-    {path: '/categories', component: CategoryIndex},
+    // {path: '/categories', component: CategoryIndex},
     {path: '/edit/categories', component: editCategories},
     {path: '/category/:id', component: CategoryShow, props: true},
     {path: '/edit/services/:id', component: ShowService, props: route => ({id: route.params.id})},
