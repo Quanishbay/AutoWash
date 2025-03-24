@@ -2,6 +2,7 @@
 
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\EmployeeController;
 use App\Http\Controllers\Admin\ExportController;
 use App\Http\Controllers\Admin\MailController;
 use App\Http\Controllers\Booking\BookingController;
@@ -70,8 +71,17 @@ Route::group(['prefix' => 'booking'], function ($router) {
 Route::prefix('admin')->group(function () {
     Route::get('/', [IndexController::class, 'show'])->middleware('check.admin');
     Route::get('/get-washes', [AdminController::class, 'getWashes'])->middleware('check.admin', 'jwt.auth');
-    Route::get('/send-promotions', [MailController::class, 'sendPromotions'])->middleware('check.admin', 'jwt.auth');
+    Route::post('/send-promotions', [MailController::class, 'sendPromotions'])->middleware('check.admin', 'jwt.auth');
     Route::get('/export-clients', [ExportController::class, 'exportClients'])->middleware('check.admin', 'jwt.auth');
 });
+
+Route::prefix('employee')->group(function () {
+    Route::get('/', [EmployeeController::class, 'index']);
+    Route::post('/create', [EmployeeController::class, 'create'])->middleware('check.admin', 'jwt.auth');
+    Route::put('/update/{id}', [EmployeeController::class, 'update'])->middleware('check.admin', 'jwt.auth');
+    Route::delete('/delete/{id}', [EmployeeController::class, 'delete'])->middleware('check.admin', 'jwt.auth');
+});
+
+
 
 

@@ -11,9 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('car_wash_schedules', function (Blueprint $table) {
-            $table->foreignId('service_id')->constrained('services');
-        });
+
+//        Schema::table('car_wash_schedules', function (Blueprint $table) {
+//            $table->foreignId('service_id')->constrained('services');
+//        });
     }
 
     /**
@@ -21,9 +22,9 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('car_wash_schedules', function (Blueprint $table) {
-            $table->dropForeign('car_washes_schedule_service_id_foreign');
-            $table->dropColumn('service_id');
-        });
+//        Schema::table('car_wash_schedules', function (Blueprint $table) {
+//            $table->dropForeign('car_washes_schedule_service_id_foreign');
+//            $table->dropColumn('service_id');
+//        });
     }
 };
