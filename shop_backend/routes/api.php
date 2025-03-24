@@ -43,6 +43,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 
 Route::group(['prefix' => 'car-washes'], function () {
     Route::get('/', [CarWashController::class, 'index']);
+    Route::get('/services', [CarWashController::class, 'services']);
     Route::get('/services-by-id', [CarWashController::class, 'index']);
     Route::get('/schedule-by-id', [CarWashScheduleController::class, 'scheduleById']);
     Route::get('/filter-with-name', [FilterServices::class, 'filterServices']);

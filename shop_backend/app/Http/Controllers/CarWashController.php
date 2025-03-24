@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CarWash;
 use App\Models\CategoryCarWash;
+use App\Models\Service;
 use Illuminate\Http\Request;
 
 class CarWashController extends Controller
@@ -36,6 +37,10 @@ class CarWashController extends Controller
         $category = $request->input('category_id');
 
         return CategoryCarWash::where('category_id', $category)->get();
+    }
+
+    public function services(){
+        return Service::all();
     }
 }
 
