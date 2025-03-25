@@ -15,6 +15,7 @@ class AdminController extends Controller
         $last = $request->input('last');
         $popular = $request->input('popular');
         $order = $request->input('order');
+        $customers = $request->input('customers');
 
 
         if ($name) {
@@ -41,6 +42,12 @@ class AdminController extends Controller
 
         if($order){
             return CarWashSchedule::count('id');
+        }
+
+        if($customers){
+            return DB::table('car_wash_schedules as c')
+                ->leftJoin('services', 'services.id', '=', 'c.service_id')
+                ->sum('services.price');
         }
 
 
