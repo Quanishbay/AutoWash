@@ -8,6 +8,7 @@ use App\Models\CarWash;
 use App\Models\CarWashSchedule;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class IndexController extends Controller
@@ -20,11 +21,14 @@ class IndexController extends Controller
     }
 
     public function show(Request $request) {
-        $id = $request->input('user_id');
 
-        $bookings = CarWashSchedule::select('car_wash_schedules.*', 'car_washes.category_id')
-            ->join('car_washes', 'car_wash_schedules.car_wash_id', '=', 'car_washes.id') // Соединение с таблицей car_washes
-            ->where('car_wash_schedules.user_id', $id)
+        $id = auth()->user();
+
+
+        $bookings = DB::table('car_wash_schedules as c')
+            ->leftJoin('services', 'services.id', '=', 'c.service_id')
+            ->where('c.user_id', '=', $id['id'])
+            ->select('c.date', 'c.time', 'c.status', 'services.name')
             ->get();
 
         return response()->json($bookings);

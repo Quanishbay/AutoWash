@@ -29,7 +29,6 @@ Route::prefix('user')->group(function () {
     Route::put('/edit-user', [RegisterController::class, 'editUser'])->name('jwt.auth');
     Route::get('/', [IndexController::class, 'show'])->middleware('jwt.auth');
     Route::post('/upload-photo', [PhotoController::class, 'uploadPhoto'])->middleware('jwt.auth');
-    Route::get('/history', [PurchasesHistory::class, 'index'])->middleware('jwt.auth');
     Route::post('/send-welcome-email', [EmailController::class, 'sendWelcomeEmail']);
 
 });
@@ -52,6 +51,8 @@ Route::group(['prefix' => 'car-washes'], function () {
     Route::get('/get-by-category', [CarWashController::class, 'getByCategory']);
     Route::get('/available-slots', [CarWashScheduleController::class, 'availableSlots'])->middleware('jwt.auth');
     Route::post('/book-slot', [CarWashScheduleController::class, 'bookSlot'])->middleware('jwt.auth');
+    Route::get('/history', [PurchasesHistory::class, 'index'])->middleware('jwt.auth');
+
 });
 
 

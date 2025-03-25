@@ -11,12 +11,13 @@ class AdminController extends Controller
 {
     public function getWashes(Request $request)
     {
-        $user = $request->input('user');
+        $name = $request->input('name');
         $last = $request->input('last');
         $popular = $request->input('popular');
+        $order = $request->input('order');
 
 
-        if ($user) {
+        if ($name) {
             return CarWashSchedule::select('user_id')
                 ->distinct()
                 ->get();
@@ -37,6 +38,13 @@ class AdminController extends Controller
                 ->limit(5)
                 ->get();
         }
+
+        if($order){
+            return CarWashSchedule::count('id');
+        }
+
+
+
     }
 
 
