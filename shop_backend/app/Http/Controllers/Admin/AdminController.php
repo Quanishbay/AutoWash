@@ -25,7 +25,10 @@ class AdminController extends Controller
         }
 
         if ($last) {
-            return CarWashSchedule::orderBy('created_at')
+            return DB::table('car_wash_schedules')
+                ->leftJoin('car_washes', 'car_washes.id', '=', 'car_wash_schedules.car_wash_id')
+                ->select('car_wash_schedules.*', 'car_washes.name')
+                ->orderBy('car_wash_schedules.created_at')
                 ->limit(5)
                 ->get();
         }
