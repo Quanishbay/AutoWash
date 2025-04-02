@@ -22,10 +22,10 @@ class EmployeeController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:employees,email',
-            'phone_number' => 'required|regex:/^\d{10,15}$/',
+            'phone_number' => 'required|string',
             'position' => 'required|string|max:100',
             'hired_at' => 'required|date',
-            'shift' => 'required|in:дневная,ночная',
+            'shift' => 'required|string',
         ]);
 
         $validatedData['car_wash_id'] = auth()->user()['car_wash_id'];

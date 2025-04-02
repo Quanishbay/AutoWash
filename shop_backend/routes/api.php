@@ -62,7 +62,7 @@ Route::group(['prefix' => 'booking'], function ($router) {
     Route::post('/create', [BookingController::class, 'create'])->middleware('jwt.auth');
     Route::put('/confirm/{id}', [BookingController::class, 'bookingConfirm'])->middleware('jwt.auth');
     Route::put('/cancel/{id}', [BookingController::class, 'bookingCancel'])->middleware('jwt.auth');
-    Route::put('edit', [BookingController::class, 'edit'])->middleware('jwt.auth');
+    Route::put('/edit', [BookingController::class, 'edit'])->middleware('jwt.auth');
     Route::post('/create-order', [OrderController::class, 'createOrder']);
 });
 
