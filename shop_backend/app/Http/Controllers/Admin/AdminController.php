@@ -17,7 +17,6 @@ class AdminController extends Controller
         $order = $request->input('order');
         $customers = $request->input('customers');
 
-
         if ($name) {
             return CarWashSchedule::select('user_id')
                 ->distinct()
@@ -48,12 +47,11 @@ class AdminController extends Controller
         }
 
         if($customers){
-            return DB::table('car_wash_schedules as c')
-                ->leftJoin('services', 'services.id', '=', 'c.service_id')
-                ->sum('services.price');
+            return DB::table('car_wash_schedules')
+                ->leftJoin('users', 'users.id', '=', 'car_wash_schedules.user_id')
+                ->distinct('users.id')
+                ->count('users.id');
         }
-
-
 
     }
 

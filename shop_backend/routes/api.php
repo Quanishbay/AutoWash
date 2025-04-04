@@ -22,15 +22,12 @@ use App\Http\Controllers\User\RegisterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 
-
-
 Route::prefix('user')->group(function () {
     Route::post('/register', [RegisterController::class, 'store']);
     Route::put('/edit-user', [RegisterController::class, 'editUser'])->name('jwt.auth');
     Route::get('/', [IndexController::class, 'show'])->middleware('jwt.auth');
     Route::post('/upload-photo', [PhotoController::class, 'uploadPhoto'])->middleware('jwt.auth');
     Route::post('/send-welcome-email', [EmailController::class, 'sendWelcomeEmail']);
-
 });
 
 Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
@@ -52,9 +49,7 @@ Route::group(['prefix' => 'car-washes'], function () {
     Route::get('/available-slots', [CarWashScheduleController::class, 'availableSlots'])->middleware('jwt.auth');
     Route::post('/book-slot', [CarWashScheduleController::class, 'bookSlot'])->middleware('jwt.auth');
     Route::get('/history', [PurchasesHistory::class, 'index'])->middleware('jwt.auth');
-
 });
-
 
 Route::group(['prefix' => 'booking'], function ($router) {
     Route::get('/', [BookingController::class, 'index']);
@@ -65,9 +60,6 @@ Route::group(['prefix' => 'booking'], function ($router) {
     Route::put('/edit', [BookingController::class, 'edit'])->middleware('jwt.auth');
     Route::post('/create-order', [OrderController::class, 'createOrder']);
 });
-
-
-
 
 Route::prefix('admin')->group(function () {
     Route::get('/', [IndexController::class, 'show'])->middleware('check.admin');
