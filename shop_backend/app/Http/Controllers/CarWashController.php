@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\CarWash;
+use App\Models\CarWashSchedule;
 use App\Models\CategoryCarWash;
 use App\Models\Service;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CarWashController extends Controller
 {
@@ -41,6 +43,27 @@ class CarWashController extends Controller
 
     public function services(){
         return Service::all();
+    }
+
+    public function servicesById(Request $request){
+
+        $carWashId = auth()->user()['car_wash_id'];
+
+        $serviceData = DB::table('car_wash_schedules')
+            ->leftJoin('services', 'services.id', '=', 'car_wash_schedules.service_id')
+            ->leftJoin('categories', 'categories.id', '=', 'services.category_id')
+            ->where('car_wash_schedules.id', $carWashId)
+            ->select(
+                'services.name as service_name',
+                'services.price',
+                'services.image',
+                'categories.name as category_name'
+            )
+            ->distinct()
+            ->get();
+
+
+        return $serviceData;
     }
 }
 

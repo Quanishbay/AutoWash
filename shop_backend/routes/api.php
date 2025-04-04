@@ -22,6 +22,8 @@ use App\Http\Controllers\User\RegisterController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\OrderController;
 
+
+
 Route::prefix('user')->group(function () {
     Route::post('/register', [RegisterController::class, 'store']);
     Route::put('/edit-user', [RegisterController::class, 'editUser'])->name('jwt.auth');
@@ -41,7 +43,7 @@ Route::group(['middleware' => 'api', 'prefix' => 'auth'], function ($router) {
 Route::group(['prefix' => 'car-washes'], function () {
     Route::get('/', [CarWashController::class, 'index']);
     Route::get('/services', [CarWashController::class, 'services']);
-    Route::get('/services-by-id', [CarWashController::class, 'index']);
+    Route::get('/services-by-id', [CarWashController::class, 'servicesById']);
     Route::get('/schedule-by-id', [CarWashScheduleController::class, 'scheduleById']);
     Route::get('/filter-with-name', [FilterServices::class, 'filterServices']);
     Route::get('/categories', [CategoryController::class, 'index']);
