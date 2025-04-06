@@ -70,6 +70,9 @@ Route::prefix('admin')->group(function () {
     Route::get('/get-washes', [AdminController::class, 'getWashes'])->middleware('check.admin', 'jwt.auth');
     Route::post('/send-promotions', [MailController::class, 'sendPromotions'])->middleware('check.admin', 'jwt.auth');
     Route::get('/export-clients', [ExportController::class, 'exportClients'])->middleware('check.admin', 'jwt.auth');
+
+    Route::get('/category-create', [ExportController::class, 'categoryCreate'])->middleware('check.admin', 'jwt.auth');
+
 });
 
 Route::prefix('employee')->group(function () {
@@ -77,6 +80,14 @@ Route::prefix('employee')->group(function () {
     Route::post('/create', [EmployeeController::class, 'create'])->middleware('check.admin', 'jwt.auth');
     Route::put('/update/{id}', [EmployeeController::class, 'update'])->middleware('check.admin', 'jwt.auth');
     Route::delete('/delete/{id}', [EmployeeController::class, 'delete'])->middleware('check.admin', 'jwt.auth');
+});
+
+
+Route::prefix('categories')->group(function () {
+    Route::get('/', [CategoryController::class, 'index']);
+    Route::post('/create', [CategoryController::class, 'create']);
+    Route::put('/update/{id}', [CategoryController::class, 'update']);
+    Route::delete('/delete/{id}', [CategoryController::class, 'delete']);
 });
 
 

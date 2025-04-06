@@ -11,8 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('car_wash_schedules', function (Blueprint $table) {
-            $table->foreignId('service_id')->constrained('services');
+        Schema::table('categories', function (Blueprint $table) {
+            $table->foreignId('car_wash_id')->constrained('car_washes');
         });
     }
 
@@ -21,8 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('car_wash_schedules', function (Blueprint $table) {
-            $table->dropForeign('car_wash_schedules_service_id_foreign');
+        Schema::table('categories', function (Blueprint $table) {
+            $table->dropForeign('car_wash_id');
         });
     }
 };
