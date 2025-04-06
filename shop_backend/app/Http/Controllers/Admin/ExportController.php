@@ -25,6 +25,7 @@ class ExportController extends Controller
             ->groupBy('users.id', 'users.name', 'users.email')
             ->get();
 
+
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
@@ -42,19 +43,16 @@ class ExportController extends Controller
             $row++;
         }
 
-        // Создаём временный поток в памяти
-        $tempFile = fopen('php://memory', 'w+');
+        // Сохраняем файл в путь на сервере
+        $filePath = storage_path('app/public/clients.xlsx');
         $writer = new Xlsx($spreadsheet);
-        $writer->save($tempFile);
-        rewind($tempFile); // Возвращаем указатель в начало
+        $writer->save($filePath);
 
-        // Читаем содержимое файла в строку (BLOB)
-        $blob = stream_get_contents($tempFile);
-        fclose($tempFile);
-
+        // Возвращаем ссылку на скачивание
         return response()->json([
-            'file' => base64_encode($blob) // Кодируем в base64 для передачи в JSON
+            'file_url' => url('storage/clients.xlsx')
         ]);
     }
+
 
 }

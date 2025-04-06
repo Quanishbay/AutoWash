@@ -37,8 +37,8 @@ class AdminController extends Controller
         if ($popular) {
             return DB::table('car_wash_schedules')
                 ->join('services', 'services.id', '=', 'car_wash_schedules.service_id') // join таблиц
-                ->select('services.name', DB::raw('COUNT(car_wash_schedules.service_id) as service_count')) // выбор полей и COUNT
-                ->groupBy('car_wash_schedules.service_id', 'services.name')
+                ->select('services.name', DB::raw('COUNT(car_wash_schedules.service_id) as service_count'), 'services.image') // выбор полей и COUNT
+                ->groupBy('car_wash_schedules.service_id', 'services.name', 'services.image')
                 ->orderBy('service_count', 'desc')
                 ->limit(5)
                 ->get();
