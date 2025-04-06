@@ -51,6 +51,8 @@ Route::group(['prefix' => 'car-washes'], function () {
     Route::get('/available-slots', [CarWashScheduleController::class, 'availableSlots'])->middleware('jwt.auth');
     Route::post('/book-slot', [CarWashScheduleController::class, 'bookSlot'])->middleware('jwt.auth');
     Route::get('/history', [PurchasesHistory::class, 'index'])->middleware('jwt.auth');
+    Route::get('/get-revenue', [CarWashController::class, 'getRevenue'])->middleware('jwt.auth', 'check.admin');
+
 });
 
 Route::group(['prefix' => 'booking'], function ($router) {

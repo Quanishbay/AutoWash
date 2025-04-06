@@ -16,6 +16,7 @@ class AdminController extends Controller
         $popular = $request->input('popular');
         $order = $request->input('order');
         $customers = $request->input('customers');
+        $revenue = $request->input('revenue');
 
         if ($name) {
             return CarWashSchedule::select('user_id')
@@ -26,7 +27,8 @@ class AdminController extends Controller
         if ($last) {
             return DB::table('car_wash_schedules')
                 ->leftJoin('car_washes', 'car_washes.id', '=', 'car_wash_schedules.car_wash_id')
-                ->select('car_wash_schedules.*', 'car_washes.name')
+                ->leftJoin('services', 'services.id', '=', 'car_wash_schedules.service_id')
+                ->select('car_wash_schedules.*', 'car_washes.name', 'services.image', 'services.name')
                 ->orderBy('car_wash_schedules.created_at')
                 ->limit(5)
                 ->get();
@@ -52,6 +54,8 @@ class AdminController extends Controller
                 ->distinct('users.id')
                 ->count('users.id');
         }
+
+
 
     }
 

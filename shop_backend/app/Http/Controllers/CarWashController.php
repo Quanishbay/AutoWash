@@ -65,6 +65,20 @@ class CarWashController extends Controller
 
         return $serviceData;
     }
+
+    public function getRevenue(Request $request)
+    {
+        $car_wash_id = auth()->user()['car_wash_id'];
+        $revenue = $request->input('revenue');
+
+
+        if($revenue){
+            return DB::table('car_wash_schedules')
+                ->leftJoin('services', 'services.id', '=', 'car_wash_schedules.service_id')
+                ->where('car_wash_schedules.car_wash_id', $car_wash_id)
+                ->sum('services.price');
+        }
+    }
 }
 
 
