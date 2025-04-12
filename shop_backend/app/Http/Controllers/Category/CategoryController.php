@@ -45,7 +45,12 @@ class CategoryController extends Controller
 
         $validated['car_wash_id'] = $car_wash_id;
 
-        Category::create($validated);
+        $category = Category::create($validated);
+
+        CategoryCarWash::create([
+            'car_wash_id' => $car_wash_id,
+            'category_id' =>$category->id
+        ]);
 
         return response()->json([
             'message' => 'Category created successfully',
