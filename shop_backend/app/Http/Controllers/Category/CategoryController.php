@@ -20,6 +20,7 @@ class CategoryController extends Controller
             ->leftJoin('categories', 'categories.id', '=', 'category_car_washes.category_id')
             ->leftJoin('car_washes', 'car_washes.id', '=', 'category_car_washes.car_wash_id')
             ->select(
+                'categories.id',
                 'car_washes.name',
                 'categories.name as category_name',
                 'categories.description',
@@ -27,7 +28,7 @@ class CategoryController extends Controller
                 'car_washes.whatsapp',
                 'car_washes.instagram'
             )
-            ->where('car_wash_id', $car_wash_id)
+            ->where('category_car_washes.car_wash_id', $car_wash_id)
             ->get();
 
     }

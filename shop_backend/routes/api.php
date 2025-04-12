@@ -46,7 +46,7 @@ Route::group(['prefix' => 'car-washes'], function () {
     Route::get('/services-by-id', [CarWashController::class, 'servicesById']);
     Route::get('/schedule-by-id', [CarWashScheduleController::class, 'scheduleById']);
     Route::get('/filter-with-name', [FilterServices::class, 'filterServices']);
-    Route::get('/categories', [CategoryController::class, 'index']);
+//    Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/get-by-category', [CarWashController::class, 'getByCategory']);
     Route::get('/available-slots', [CarWashScheduleController::class, 'availableSlots'])->middleware('jwt.auth');
     Route::post('/book-slot', [CarWashScheduleController::class, 'bookSlot'])->middleware('jwt.auth');
@@ -81,7 +81,6 @@ Route::prefix('employee')->group(function () {
     Route::put('/update/{id}', [EmployeeController::class, 'update'])->middleware('check.admin', 'jwt.auth');
     Route::delete('/delete/{id}', [EmployeeController::class, 'delete'])->middleware('check.admin', 'jwt.auth');
 });
-
 
 Route::prefix('categories')->group(function () {
     Route::get('/', [CategoryController::class, 'index']);
