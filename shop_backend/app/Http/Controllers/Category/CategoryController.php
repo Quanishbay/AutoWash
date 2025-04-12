@@ -28,7 +28,7 @@ class CategoryController extends Controller
                 'car_washes.whatsapp',
                 'car_washes.instagram'
             )
-            ->where('category_car_washes.car_wash_id', $car_wash_id)
+            ->where('categories.car_wash_id', $car_wash_id)
             ->get();
 
     }
