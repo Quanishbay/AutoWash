@@ -16,19 +16,18 @@ class CategoryController extends Controller
     {
         $car_wash_id = auth()->user()['car_wash_id'];
 
-        return DB::table('category_car_washes')
-            ->leftJoin('categories', 'categories.id', '=', 'category_car_washes.category_id')
-            ->leftJoin('car_washes', 'car_washes.id', '=', 'category_car_washes.car_wash_id')
-            ->select(
+        return DB::table('categories')
+            ->leftJoin('car_washes', 'car_washes.id', '=', 'categories.car_wash_id')
+            ->where('car_wash_id', $car_wash_id)
+            ->select([
                 'categories.id',
                 'car_washes.name',
                 'categories.name as category_name',
                 'categories.description',
                 'car_washes.phone',
                 'car_washes.whatsapp',
-                'car_washes.instagram'
-            )
-            ->where('categories.car_wash_id', $car_wash_id)
+                'car_washes.instagram',
+            ])
             ->get();
 
     }
@@ -45,12 +44,7 @@ class CategoryController extends Controller
 
         $validated['car_wash_id'] = $car_wash_id;
 
-        $category = Category::create($validated);
-
-        CategoryCarWash::create([
-            'car_wash_id' => $car_wash_id,
-            'category_id' =>$category->id
-        ]);
+        Category::create($validated);
 
         return response()->json([
             'message' => 'Category created successfully',
